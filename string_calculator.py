@@ -3,6 +3,7 @@ import re
 
 def extract_delimiter(input_string):
     delimiter = ',|\n'
+    numbers_str = input_string
     # Custom delimiter logic
     if input_string.startswith("//"):
         parts = input_string.split('\n', 1)
@@ -14,26 +15,28 @@ def extract_delimiter(input_string):
         else:
             delimiter = re.escape(delimiter_part)
         delimiter = f"{delimiter}|\n|,"
-    return delimiter
+    return delimiter, numbers_str
 
 
 def parse_numbers(numbers_str, delimiter):
-    return re.split(delimiter, numbers_str)
+    return [num for num in re.split(delimiter, numbers_str) if num]
 
 
-def check_negatives(numbers):
-    negatives = [num for num in numbers if num and int(num) < 0]
-    if negatives:
-        raise Exception(f"negatives not allowed: {', '.join(negatives)}")
+def filter_numbers(numbers):
+    return [int(num) for num in numbers if int(num) <= 1000]
+
+
+def find_negatives(numbers):
+    return [str(num) for num in numbers if num < 0]
 
 
 def string_calculator(input_string):
     if input_string == "":
         return 0
-
-    delimiter = extract_delimiter(input_string)
-    numbers_str = input_string
-
+    delimiter, numbers_str = extract_delimiter(input_string)
     numbers = parse_numbers(numbers_str, delimiter)
-    check_negatives(numbers)
-    return sum(int(num) for num in numbers if num and int(num) <= 1000)
+    int_numbers = filter_numbers(numbers)
+    negatives = find_negatives(int_numbers)
+    if negatives:
+        raise Exception(f"negatives not allowed: {', '.join(negatives)}")
+    return sum(int_numbers)
