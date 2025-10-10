@@ -2,16 +2,14 @@ import re
 
 
 def extract_delimiter(input_string):
-    if not input_string.startswith("//"):
-        return ',|\n', input_string
-    parts = input_string.split('\n', 1)
-    delimiter_part = parts[0][2:]
-    numbers_str = parts[1]
-    if delimiter_part.startswith('[') and delimiter_part.endswith(']'):
-        delimiter = re.escape(delimiter_part[1:-1])
-    else:
-        delimiter = re.escape(delimiter_part)
-    return f"{delimiter}|\n|,", numbers_str
+    if input_string.startswith("//"):
+        parts = input_string.split('\n', 1)
+        delimiter_part = parts[0][2:]
+        numbers_str = parts[1]
+        delimiter = delimiter_part[1:-1] if delimiter_part.startswith('[') and delimiter_part.endswith(']') else delimiter_part
+        delimiter = re.escape(delimiter)
+        return f"{delimiter}|\n|,", numbers_str
+    return ',|\n', input_string
 
 
 def parse_numbers(numbers_str, delimiter):
