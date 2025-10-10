@@ -1,4 +1,4 @@
- import pytest.py
+import pytest.py
 from string_calculator import string_calculator
 
 def test_empty_string_returns_zero():
@@ -32,4 +32,5 @@ test_custom_delimiter_semicolon()
 test_negative_numbers_raise_exception()
 test_ignore_numbers_greater_than_1000()
 test_custom_delimiter_any_length()
+
 
